@@ -37,12 +37,12 @@ Powered by [gamdl](https://github.com/glomatico/gamdl) on the backend and built 
 
 Add these tools to your system **PATH**, or set their paths in [Settings](#settings) (`~/.am-mix/config.yml`). Which tools you need depends on which features you use:
 
-| Use Case | Settings | Required Tools |
-| --- | --- | --- |
-| **Songs (legacy codecs)** | Song Codec Priority:<br>`aac-legacy` or `aac-he-legacy` | None |
-| **Songs (non-legacy codecs)** | Song Codec Priority:<br>`aac`, `aac-he`, `aac-binaural`, `aac-downmix`<br>`aac-he-binaural`, `aac-he-downmix`, `atmos`, `ac3`, `alac`, `ask`<br>API Method: `wrapper` | [Wrapper](https://github.com/WorldObservationLog/wrapper) |
-| **Music videos** | Music Video Remux Mode: `ffmpeg`<br>Music Video Remux Mode: `mp4box` | FFmpeg, mp4decrypt<br>MP4Box, mp4decrypt |
-| **Faster downloads** | Download Mode: `nm3u8dlre` | [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE/releases/latest) |
+| Use Case                      | Settings                                                                                                                                                              | Required Tools                                                        |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **Songs (legacy codecs)**     | Song Codec Priority:<br>`aac-legacy` or `aac-he-legacy`                                                                                                               | None                                                                  |
+| **Songs (non-legacy codecs)** | Song Codec Priority:<br>`aac`, `aac-he`, `aac-binaural`, `aac-downmix`<br>`aac-he-binaural`, `aac-he-downmix`, `atmos`, `ac3`, `alac`, `ask`<br>API Method: `wrapper` | [Wrapper](https://github.com/WorldObservationLog/wrapper)             |
+| **Music videos**              | Music Video Remux Mode: `ffmpeg`<br>Music Video Remux Mode: `mp4box`                                                                                                  | FFmpeg, mp4decrypt<br>MP4Box, mp4decrypt                              |
+| **Faster downloads**          | Download Mode: `nm3u8dlre`                                                                                                                                            | [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE/releases/latest) |
 
 #### Tool reference
 
