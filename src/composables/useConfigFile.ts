@@ -17,10 +17,15 @@ export const useConfigFile = () => {
     await rpc.call("config_file_update", { update });
   };
 
+  const getVersion = async () => {
+    return await rpc.call("get_version");
+  };
+
   return {
     initialize,
     exists,
     getJsonConfig,
     update,
+    getVersion,
   };
 };
