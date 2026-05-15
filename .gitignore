@@ -1,7 +1,6 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
-build/
 dist/
 wheels/
 *.egg-info
@@ -9,7 +8,6 @@ wheels/
 # front
 node_modules
 dist-ssr
-build
 *.local
 build-front
 dist-front
@@ -17,5 +15,6 @@ dist-front
 # Virtual environments
 .venv
 
-# pyinstaller
-dist
+# PyInstaller output (repo root only; do not ignore src-pyloid/build/)
+/build/
+/dist/
