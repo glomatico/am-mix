@@ -27,7 +27,7 @@
     "retryFailed": "Retry Failed"
   },
   "searchBar": {
-    "placeholder": "Search..."
+    "placeholder": "Search or Paste URL..."
   },
   "mediaCard": {
     "download": "Download",
