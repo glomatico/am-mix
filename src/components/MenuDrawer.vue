@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
+import AppLogo from '../assets/logo.svg';
 
 const route = useRoute();
 const router = useRouter();
@@ -42,13 +43,17 @@ const activeItem = computed(() => {
       <v-container>
         <v-row align="center" density="comfortable">
           <v-col cols="auto">
-            <v-btn icon="mdi-close" @click="visible = false" variant="text" size="x-small" />
+            <img :src="AppLogo" alt="App Logo" style="width: 48px;" />
           </v-col>
 
-          <v-col>
+          <v-col style="min-width: 0">
             <v-toolbar-title class="font-weight-bold">
               {{ $t("appName") }}
             </v-toolbar-title>
+          </v-col>
+
+          <v-col cols="auto">
+            <v-btn icon="mdi-close" @click="visible = false" variant="text" size="x-small" />
           </v-col>
         </v-row>
       </v-container>
