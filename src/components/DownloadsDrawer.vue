@@ -12,14 +12,14 @@ const { queue, hasErrors, clearQueue, retryFailedItems } = useDownloadManager();
     <v-toolbar :elevation="4" color="surface">
       <v-container>
         <v-row align="center" density="comfortable">
-          <v-col cols="auto">
-            <v-btn icon="mdi-close" @click="visible = false" variant="text" size="x-small" />
-          </v-col>
-
-          <v-col>
+          <v-col style="min-width: 0">
             <v-toolbar-title>
               {{ $t("downloadDrawer.title") }}
             </v-toolbar-title>
+          </v-col>
+
+          <v-col cols="auto">
+            <v-btn icon="mdi-close" @click="visible = false" variant="text" size="x-small" />
           </v-col>
         </v-row>
       </v-container>
@@ -28,27 +28,15 @@ const { queue, hasErrors, clearQueue, retryFailedItems } = useDownloadManager();
     <v-container>
       <v-row>
         <v-col cols="12">
-          <v-btn
-            :disabled="queue.size === 0"
-            block
-            variant="outlined"
-            rounded
-            prepend-icon="mdi-playlist-remove"
-            @click="clearQueue"
-          >
+          <v-btn :disabled="queue.size === 0" block variant="outlined" rounded prepend-icon="mdi-playlist-remove"
+            @click="clearQueue">
             {{ $t("downloadDrawer.clearQueue") }}
           </v-btn>
         </v-col>
 
         <v-col cols="12">
-          <v-btn
-            :disabled="!hasErrors"
-            block
-            variant="outlined"
-            rounded
-            prepend-icon="mdi-refresh"
-            @click="retryFailedItems"
-          >
+          <v-btn :disabled="!hasErrors" block variant="outlined" rounded prepend-icon="mdi-refresh"
+            @click="retryFailedItems">
             {{ $t("downloadDrawer.retryFailed") }}
           </v-btn>
         </v-col>
