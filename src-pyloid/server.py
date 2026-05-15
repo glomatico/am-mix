@@ -1,9 +1,8 @@
 import asyncio
 import inspect
+from pathlib import Path
 from typing import Any
 
-from src.config_file import ConfigFile, ApiMethod
-from src.download_manager.manager import DownloadManager
 from gamdl.api import AppleMusicApi
 from gamdl.downloader import (
     AppleMusicBaseDownloader,
@@ -19,11 +18,14 @@ from gamdl.interface import (
     AppleMusicSongInterface,
     AppleMusicUploadedVideoInterface,
 )
-from pyloid.rpc import PyloidRPC
 from pyloid.browser_window import BrowserWindow
+from pyloid.rpc import PyloidRPC
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QDesktopServices
-from pathlib import Path
+from src.config_file import ApiMethod, ConfigFile
+from src.download_manager.manager import DownloadManager
+
+from src import __version__
 
 
 class CustomRpc(PyloidRPC):
@@ -46,6 +48,7 @@ class CustomRpc(PyloidRPC):
         self._functions["open_file_dialog"] = self.open_file_dialog
         self._functions["select_directory_dialog"] = self.select_directory_dialog
         self._functions["open_url"] = self.open_url
+        self._functions["get_version"] = self.get_version
 
     def _bind_methods(
         self,
@@ -224,3 +227,6 @@ class CustomRpc(PyloidRPC):
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(path_obj.parent)))
         else:
             QDesktopServices.openUrl(QUrl.fromLocalFile(url))
+
+    async def get_version(self) -> str:
+        return __version__
