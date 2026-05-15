@@ -37,12 +37,17 @@ const handleDownload = async (url: string) => {
         <v-col style="min-width: 0">
           <v-row align="center">
             <v-col class="overflow-hidden">
-              <h1 class="text-truncate font-weight-bold text-left ma-0 mb-1">
+              <h1 class="text-truncate font-weight-bold text-left ma-0 mb-2">
                 {{ metadata?.attributes?.name || $t("unknownTitle") }}
               </h1>
 
-              <p v-if="metadata?.attributes?.trackCount" class="text-truncate text-label-medium text-left ma-0 mb-1">
+              <p v-if="metadata?.attributes?.trackCount" class="text-truncate text-label-medium text-left ma-0 mb-2">
                 {{ $t('collectionCard.trackCount', { count: metadata.attributes.trackCount }) }}
+              </p>
+
+              <p v-if="metadata?.attributes?.editorialNotes?.short"
+                class="text-truncate text-label-medium text-left ma-0">
+                {{ metadata?.attributes?.editorialNotes?.short }}
               </p>
             </v-col>
           </v-row>
@@ -53,17 +58,32 @@ const handleDownload = async (url: string) => {
             <v-icon size="small">mdi-dots-vertical</v-icon>
             <v-menu activator="parent">
               <v-list>
-                <v-list-item
-                  prepend-icon="mdi-download"
-                  :title="$t('mediaCard.download')"
-                  @click="handleDownload(metadata.attributes?.url)"
-                />
+                <v-list-item prepend-icon="mdi-download" :title="$t('mediaCard.download')"
+                  @click="handleDownload(metadata.attributes?.url)" />
 
-                <v-list-item
-                  prepend-icon="mdi-content-copy"
-                  :title="$t('mediaCard.copyLink')"
-                  @click="copyUrl(metadata)"
-                />
+                <v-list-item prepend-icon="mdi-content-copy" :title="$t('mediaCard.copyLink')"
+                  @click="copyUrl(metadata)" />
+
+                <v-dialog v-if="metadata?.attributes?.editorialNotes?.standard" max-width="600">
+                  <template v-slot:activator="{ props: activatorProps }">
+                    <v-list-item prepend-icon="mdi-information" :title="$t('collectionBanner.showDescription')"
+                      v-bind="activatorProps" />
+                  </template>
+
+                  <template v-slot:default="{ isActive }">
+                    <v-card :title="$t('collectionBanner.description')">
+                      <v-card-text>
+                        <p v-html="metadata?.attributes?.editorialNotes?.standard"></p>
+                      </v-card-text>
+
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn :text="$t('collectionBanner.close')" @click="isActive.value = false"></v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </template>
+                </v-dialog>
               </v-list>
             </v-menu>
           </v-btn>
