@@ -138,7 +138,6 @@ class CustomRpc(PyloidRPC):
             song,
             music_video,
             uploaded_video,
-            concurrency=config.max_concurrent_downloads,
         )
 
     async def initialize_apple_music_downloader(self) -> None:

@@ -187,22 +187,36 @@ class DownloadManager:
             fetch_item.status = DownloadStatus.FETCHING
             await self._notify_queue_change(url)
 
-            collected_items = []
-
             try:
                 async for download_item in self.downloader.get_download_item_from_url(
                     url
                 ):
-                    if download_item.media.partial:
-                        continue
-
                     if isinstance(
                         download_item.media.error,
                         GamdlInterfaceFlatFilterExcludedError,
                     ):
                         continue
 
-                    collected_items.append(download_item)
+                    if download_item.media.partial:
+                        continue
+
+                    media_id = download_item.media.media_id
+
+                    existing_item = self._queue_dict.get(media_id)
+
+                    if existing_item and existing_item.status in ACTIVE_STATUSES:
+                        continue
+
+                    self._queue_dict[media_id] = DownloadManagerItem(
+                        media_id=media_id,
+                        download_item=download_item,
+                        status=DownloadStatus.PENDING_DOWNLOADING,
+                    )
+                    await self._notify_queue_change(media_id)
+
+                    self._job_dict[media_id] = await self._scheduler.spawn(
+                        self._download_item(media_id)
+                    )
 
             except asyncio.CancelledError:
                 fetch_item.status = DownloadStatus.FAILED
@@ -216,26 +230,6 @@ class DownloadManager:
                 fetch_item.error = e
                 await self._notify_queue_change(url)
                 return
-
-            for download_item in collected_items:
-                media_id = download_item.media.media_id
-
-                existing_item = self._queue_dict.get(media_id)
-
-                if existing_item and existing_item.status in ACTIVE_STATUSES:
-                    continue
-
-                self._queue_dict[media_id] = DownloadManagerItem(
-                    media_id=media_id,
-                    download_item=download_item,
-                    status=DownloadStatus.PENDING_DOWNLOADING,
-                )
-
-                await self._notify_queue_change(media_id)
-
-                self._job_dict[media_id] = await self._scheduler.spawn(
-                    self._download_item(media_id)
-                )
 
             self._queue_dict.pop(url, None)
             await self._notify_queue_change(url, delete=True)
