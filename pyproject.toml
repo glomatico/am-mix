@@ -1,0 +1,21 @@
+[project]
+name = "am-mix"
+version = "1.0.0"
+readme = "README.md"
+description = "My first application"
+
+requires-python = ">=3.10"
+
+dependencies = [
+    "aiojobs>=1.4.0",
+    "gamdl @ https://github.com/glomatico/gamdl/archive/refs/heads/main.zip",
+    "pyloid",
+    "pyyaml",
+]
+
+[dependency-groups]
+dev = [
+    "pyloid-builder",
+    "pyloid-watcher",
+    "ruff",
+]

@@ -1,0 +1,36 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# front
+node_modules
+dist-ssr
+build
+*.local
+build-front
+dist-front
+
+# Virtual environments
+.venv
+
+# uv
+uv.lock
+
+# pyinstaller
+dist
+
+# npm
+package-lock.json
+
+# yarn
+yarn.lock
+
+# pnpm
+pnpm-lock.yaml
+
+# bun
+bun-lock.yaml

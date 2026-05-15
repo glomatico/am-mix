@@ -1,0 +1,31 @@
+{
+  "name": "am-mix",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm-run-all --parallel vite pyloid",
+    "dev:watch": "npm-run-all --parallel vite pyloid:watch",
+    "vite": "vite",
+    "pyloid": "uv run -p .venv ./src-pyloid/main.py",
+    "pyloid:watch": "uv run pyloid-watcher --path ./src-pyloid --pattern \"*.py\" --command \"uv run ./src-pyloid/main.py\"",
+    "build": "vue-tsc -b && vite build && uv run -p .venv ./src-pyloid/build/build.py",
+    "setup": "npm install && uv venv && uv sync"
+  },
+  "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "pyloid-js": "^0.3.3",
+    "vue": "^3.5.13",
+    "vue-i18n": "^11.4.2",
+    "vue-router": "^5.0.6",
+    "vuetify": "^4.0.7"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "npm-run-all": "^4.1.5",
+    "run-script-os": "^1.1.6",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.1",
+    "vue-tsc": "^2.1.10"
+  }
+}

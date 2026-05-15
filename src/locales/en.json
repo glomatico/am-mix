@@ -1,0 +1,231 @@
+{
+  "appName": "am-mix",
+  "unknownTitle": "Unknown Title",
+  "unknownArtist": "Unknown Artist",
+  "coverAlt": "{title} Cover",
+  "loading": {
+    "default": "Loading..."
+  },
+  "underConstruction": "This section either doesn't exist yet or is under construction.",
+  "avatarAlt": "{name} avatar",
+  "downloadItem": {
+    "fetching": "Fetching",
+    "pendingFetching": "Fetching (Pending)",
+    "pendingDownloading": "Downloading (Pending)",
+    "downloading": "Downloading",
+    "completed": "Completed",
+    "failed": "Failed",
+    "paused": "Paused",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "play": "Play",
+    "openFolder": "Open Folder"
+  },
+  "downloadDrawer": {
+    "title": "Downloads",
+    "clearQueue": "Clear Queue",
+    "retryFailed": "Retry Failed"
+  },
+  "searchBar": {
+    "placeholder": "Search..."
+  },
+  "mediaCard": {
+    "download": "Download",
+    "copyLink": "Copy Link",
+    "viewAlbum": "View Album"
+  },
+  "collectionCard": {
+    "trackCount": "{count} track(s)"
+  },
+  "menu": {
+    "home": "Home",
+    "search": "Search",
+    "library": "Library",
+    "settings": "Settings"
+  },
+  "settings": {
+    "sections": {
+      "general": "General Options",
+      "appleMusic": "Apple Music Options",
+      "output": "Output Options",
+      "folderTemplates": "Folder Templates",
+      "fileTemplates": "File Templates",
+      "cover": "Cover Options",
+      "song": "Song Options",
+      "musicVideo": "Music Video Options",
+      "uploadedVideo": "Uploaded Video Options"
+    },
+    "application": {
+      "title": "Application",
+      "maxConcurrentDownloads": "Max Concurrent Downloads"
+    },
+    "api": {
+      "title": "API",
+      "wrapper": "Use Wrapper",
+      "wrapper_account_url": "Wrapper Account URL",
+      "cookies": "Cookies File Path",
+      "language": "Language",
+      "method": {
+        "title": "API Method",
+        "wrapper": "Wrapper",
+        "cookies": "Cookies",
+        "mediaUserToken": "Media User Token"
+      }
+    },
+    "baseInterface": {
+      "title": "Base Interface",
+      "coverFormat": {
+        "title": "Cover Format"
+      },
+      "coverSize": "Cover Size",
+      "wrapperM3u8Ip": "Wrapper M3U8 IP",
+      "wvd": "WVD File Path",
+      "syncedLyricsFormat": {
+        "title": "Synced Lyrics Format"
+      },
+      "songCodec": "Song Codec Priority",
+      "useAlbumDate": "Use Album Date",
+      "syncedLyricsOnly": "Synced Lyrics Only",
+      "noSyncedLyrics": "No Synced Lyrics"
+    },
+    "musicVideoInterface": {
+      "title": "Music Video Interface",
+      "musicVideoResolution": {
+        "title": "Music Video Resolution"
+      },
+      "musicVideoCodec": "Music Video Codec Priority"
+    },
+    "uploadedVideoInterface": {
+      "title": "Uploaded Video Interface",
+      "uploadedVideoQuality": {
+        "title": "Uploaded Video Quality",
+        "best": "Best",
+        "ask": "Ask"
+      }
+    },
+    "baseDownloader": {
+      "title": "Base Downloader",
+      "output": "Output Directory",
+      "temp": "Temp Directory",
+      "nm3u8dlre": "N_m3u8DL-RE Path",
+      "mp4decrypt": "mp4decrypt Path",
+      "ffmpeg": "FFmpeg Path",
+      "mp4box": "MP4Box Path",
+      "wrapperDecryptIp": "Wrapper Decrypt IP",
+      "downloadMode": {
+        "title": "Download Mode",
+        "ytdlp": "yt-dlp",
+        "nm3u8dlre": "nm3u8dlre"
+      },
+      "albumFolderTemplate": "Album Folder Template",
+      "compilationFolderTemplate": "Compilation Folder Template",
+      "noAlbumFolderTemplate": "No Album Folder Template",
+      "playlistFolderTemplate": "Playlist Folder Template",
+      "singleDiscFileTemplate": "Single Disc File Template",
+      "multiDiscFileTemplate": "Multi Disc File Template",
+      "noAlbumFileTemplate": "No Album File Template",
+      "playlistFileTemplate": "Playlist File Template",
+      "dateTagTemplate": "Date Tag Template",
+      "excludeTags": "Exclude Tags",
+      "truncate": "Truncate"
+    },
+    "downloader": {
+      "title": "Downloader",
+      "overwrite": "Overwrite",
+      "saveCover": "Save Cover",
+      "savePlaylist": "Save Playlist"
+    },
+    "musicVideoDownloader": {
+      "title": "Music Video Downloader",
+      "musicVideoRemuxMode": {
+        "title": "Remux Mode",
+        "ffmpeg": "FFmpeg",
+        "mp4box": "MP4Box"
+      },
+      "musicVideoRemuxFormat": {
+        "title": "Remux Format",
+        "mp4": "MP4",
+        "m4v": "M4V"
+      }
+    },
+    "saveConfigFile": "Save Configuration",
+    "error": {
+      "saveConfigFile": "Error saving configuration: {message}"
+    }
+  },
+  "album": {
+    "loading": "Loading album...",
+    "error": "Error loading album: {message}"
+  },
+  "playlist": {
+    "loading": "Loading playlist...",
+    "error": "Error loading playlist: {message}"
+  },
+  "searchPage": {
+    "title": "Search",
+    "subtitle": "Search for songs, albums, playlists, and artists",
+    "loading": "Searching...",
+    "error": "Error searching: {message}",
+    "tabs": {
+      "songs": "Songs",
+      "musicVideos": "Music Videos",
+      "albums": "Albums",
+      "playlists": "Playlists",
+      "artists": "Artists"
+    },
+    "noSongsFound": "No songs found",
+    "noMusicVideosFound": "No music videos found",
+    "noAlbumsFound": "No albums found",
+    "noPlaylistsFound": "No playlists found",
+    "noArtistsFound": "No artists found"
+  },
+  "startup": {
+    "loading": {
+      "configFile": "Loading configuration...",
+      "appleMusicApi": "Loading Apple Music API...",
+      "downloadManager": "Loading download manager..."
+    },
+    "error": {
+      "configFile": "Error loading configuration: {message}",
+      "appleMusicApi": "Error loading Apple Music API: {message}",
+      "downloadManager": "Error loading download manager: {message}"
+    },
+    "goToSetup": "Go to Setup"
+  },
+  "setupPage": {
+    "title": "Welcome to {appName}!",
+    "subtitle": "Let's get you set up with preferences for downloading media."
+  },
+  "artistPage": {
+    "loading": {
+      "artist": "Loading artist...",
+      "topSongs": "Loading top songs...",
+      "musicVideos": "Loading music videos...",
+      "singles": "Loading singles...",
+      "mainAlbums": "Loading albums...",
+      "compilationAlbums": "Loading compilation albums...",
+      "liveAlbums": "Loading live albums...",
+      "allAlbums": "Loading all albums..."
+    },
+    "error": {
+      "artist": "Error loading artist: {message}",
+      "topSongs": "Error loading top songs: {message}",
+      "musicVideos": "Error loading music videos: {message}",
+      "singles": "Error loading singles: {message}",
+      "mainAlbums": "Error loading albums: {message}",
+      "compilationAlbums": "Error loading compilation albums: {message}",
+      "liveAlbums": "Error loading live albums: {message}",
+      "allAlbums": "Error loading albums: {message}"
+    },
+    "tabs": {
+      "topSongs": "Top Songs",
+      "musicVideos": "Music Videos",
+      "singles": "Singles",
+      "mainAlbums": "Albums",
+      "compilationAlbums": "Compilation Albums",
+      "liveAlbums": "Live Albums",
+      "allAlbums": "All Albums"
+    },
+    "downloadAll": "Download All"
+  }
+}
