@@ -37,6 +37,19 @@
   "collectionCard": {
     "trackCount": "{count} track(s)"
   },
+  "collectionBanner": {
+    "showDescription": "Show description",
+    "description": "Description",
+    "close": "Close",
+    "badges": {
+      "lossy": "Lossy",
+      "lossless": "Lossless",
+      "hiresLossless": "Hi-Res Lossless",
+      "atmos": "Dolby Atmos",
+      "adm": "Apple Digital Master",
+      "spatial": "Spatial Audio"
+    }
+  },
   "menu": {
     "home": "Home",
     "search": "Search",

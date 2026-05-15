@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AlbumBadges from './AlbumBadges.vue';
 import { useDownloadManager } from '../composables/useDownloadManager';
 import { copyUrl, formatArtworkUrl } from '../composables/utils';
 
@@ -46,9 +47,11 @@ const handleDownload = async (url: string) => {
               </p>
 
               <p v-if="metadata?.attributes?.editorialNotes?.short"
-                class="text-truncate text-label-medium text-left ma-0">
+                class="text-truncate text-label-medium text-left ma-0 mb-2">
                 {{ metadata?.attributes?.editorialNotes?.short }}
               </p>
+
+              <AlbumBadges :attributes="metadata?.attributes" />
             </v-col>
           </v-row>
         </v-col>
