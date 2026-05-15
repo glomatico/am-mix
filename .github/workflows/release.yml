@@ -8,6 +8,11 @@ on:
 permissions:
   contents: write
 
+env:
+  PYTHONUTF8: "1"
+  PYTHONIOENCODING: utf-8
+  CI: true
+
 jobs:
   build:
     name: Build (${{ matrix.platform }})
@@ -66,6 +71,11 @@ jobs:
           npm ci
           uv venv
           uv sync --group dev
+
+      - name: Set UTF-8 console (Windows)
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: chcp 65001 | Out-Null
 
       - name: Build app
         run: npm run build
