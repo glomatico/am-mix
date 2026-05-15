@@ -58,6 +58,7 @@
   },
   "settings": {
     "sections": {
+      "version": "Version",
       "general": "General Options",
       "appleMusic": "Apple Music Options",
       "output": "Output Options",
@@ -68,6 +69,7 @@
       "musicVideo": "Music Video Options",
       "uploadedVideo": "Uploaded Video Options"
     },
+    "version": "version {version}",
     "application": {
       "title": "Application",
       "maxConcurrentDownloads": "Max Concurrent Downloads"
