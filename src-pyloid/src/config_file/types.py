@@ -16,14 +16,13 @@ class Config:
     max_concurrent_downloads: Any = None
     # API options
     cookies: Any = None
-    wrapper_account_url: Any = None
+    wrapper_base_url: Any = None
     media_user_token: Any = None
     api_method: Any = None
     language: Any = None
     # Base Interface options
     cover_format: Any = None
     cover_size: Any = None
-    wrapper_m3u8_ip: Any = None
     wvd: Any = None
     synced_lyrics_format: Any = None
     song_codec: Any = None
@@ -38,10 +37,6 @@ class Config:
     output: Any = None
     temp: Any = None
     nm3u8dlre: Any = None
-    mp4decrypt: Any = None
-    ffmpeg: Any = None
-    mp4box: Any = None
-    wrapper_decrypt_ip: Any = None
     download_mode: Any = None
     album_folder_template: Any = None
     compilation_folder_template: Any = None
@@ -60,5 +55,4 @@ class Config:
     save_playlist: Any = None
     no_synced_lyrics: Any = None
     # Music Video Downloader options
-    music_video_remux_mode: Any = None
     music_video_remux_format: Any = None

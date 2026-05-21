@@ -3,7 +3,7 @@ import inspect
 from pathlib import Path
 from typing import Any
 
-from gamdl.api import AppleMusicApi
+from gamdl.api import AppleMusicApi, WrapperApi
 from gamdl.downloader import (
     AppleMusicBaseDownloader,
     AppleMusicDownloader,
@@ -93,7 +93,7 @@ class CustomRpc(PyloidRPC):
             )
         elif config.api_method == ApiMethod.WRAPPER:
             self.apple_music_api = await AppleMusicApi.create_from_wrapper(
-                wrapper_account_url=config.wrapper_account_url,
+                wrapper_account_url=config.wrapper_base_url,
                 language=config.language,
             )
         else:
@@ -111,13 +111,19 @@ class CustomRpc(PyloidRPC):
     async def _initialize_apple_music_interface(self) -> None:
         config = self.config_file.config
 
+        if config.api_method == ApiMethod.WRAPPER:
+            wrapper_api = await WrapperApi.create(
+                base_url=config.wrapper_base_url,
+            )
+        else:
+            wrapper_api = None
+
         base = await AppleMusicBaseInterface.create(
             self.apple_music_api,
             cover_format=config.cover_format,
             cover_size=config.cover_size,
-            use_wrapper=config.api_method == ApiMethod.WRAPPER,
-            wrapper_m3u8_ip=config.wrapper_m3u8_ip,
             wvd_path=config.wvd,
+            wrapper_api=wrapper_api,
         )
 
         song = AppleMusicSongInterface(
@@ -151,10 +157,6 @@ class CustomRpc(PyloidRPC):
             output_path=config.output,
             temp_path=config.temp,
             nm3u8dlre_path=config.nm3u8dlre,
-            mp4decrypt_path=config.mp4decrypt,
-            ffmpeg_path=config.ffmpeg,
-            mp4box_path=config.mp4box,
-            wrapper_decrypt_ip=config.wrapper_decrypt_ip,
             download_mode=config.download_mode,
             album_folder_template=config.album_folder_template,
             compilation_folder_template=config.compilation_folder_template,
@@ -173,7 +175,6 @@ class CustomRpc(PyloidRPC):
         song = AppleMusicSongDownloader(base)
         music_video = AppleMusicMusicVideoDownloader(
             base,
-            remux_mode=config.music_video_remux_mode,
             remux_format=config.music_video_remux_format,
         )
         uploaded_video = AppleMusicUploadedVideoDownloader(base)

@@ -62,7 +62,7 @@ onMounted(async () => {
 
       <v-col cols="12" md="6">
         <v-text-field variant="outlined" rounded v-if="newJsonConfig.api_method === 'wrapper'"
-          v-model="newJsonConfig.wrapper_account_url" hide-details :label="$t('settings.api.wrapper_account_url')" />
+          v-model="newJsonConfig.wrapper_base_url" hide-details :label="$t('settings.api.wrapperBaseUrl')" />
 
         <v-text-field variant="outlined" rounded v-else-if="newJsonConfig.api_method === 'media-user-token'"
           v-model="newJsonConfig.media_user_token" hide-details :label="$t('settings.api.method.mediaUserToken')" />
@@ -74,11 +74,6 @@ onMounted(async () => {
       <v-col cols="12" md="6">
         <v-text-field variant="outlined" rounded v-model="newJsonConfig.language" hide-details
           :label="$t('settings.api.language')" />
-      </v-col>
-
-      <v-col cols="12" md="6">
-        <v-text-field variant="outlined" rounded v-model="newJsonConfig.wrapper_m3u8_ip" hide-details
-          :label="$t('settings.baseInterface.wrapperM3u8Ip')" />
       </v-col>
 
       <v-col cols="12" md="6">
@@ -263,14 +258,6 @@ onMounted(async () => {
       <v-col cols="12" md="6">
         <v-combobox variant="outlined" rounded v-model="newJsonConfig.music_video_codec" multiple chips clearable
           hide-details :label="$t('settings.musicVideoInterface.musicVideoCodec')" />
-      </v-col>
-
-      <v-col cols="12" md="6">
-        <v-radio-group v-model="newJsonConfig.music_video_remux_mode"
-          :label="$t('settings.musicVideoDownloader.musicVideoRemuxMode.title')">
-          <v-radio :label="$t('settings.musicVideoDownloader.musicVideoRemuxMode.ffmpeg')" value="ffmpeg" />
-          <v-radio :label="$t('settings.musicVideoDownloader.musicVideoRemuxMode.mp4box')" value="mp4box" />
-        </v-radio-group>
       </v-col>
 
       <v-col cols="12" md="6">

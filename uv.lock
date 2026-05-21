@@ -207,7 +207,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "aiojobs", specifier = ">=1.4.0" },
-    { name = "gamdl", url = "https://github.com/glomatico/gamdl/archive/refs/heads/main.zip" },
+    { name = "gamdl", specifier = "==3.6" },
     { name = "pyloid" },
     { name = "pyyaml" },
 ]
@@ -585,8 +585,8 @@ wheels = [
 
 [[package]]
 name = "gamdl"
-version = "3.5.2"
-source = { url = "https://github.com/glomatico/gamdl/archive/refs/heads/main.zip" }
+version = "3.6"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "async-lru" },
     { name = "click" },
@@ -602,23 +602,9 @@ dependencies = [
     { name = "structlog" },
     { name = "yt-dlp" },
 ]
-sdist = { hash = "sha256:7e476c4b45fedaf7eadfdca611c8f8b6e942861d111543def13eae0420133053" }
-
-[package.metadata]
-requires-dist = [
-    { name = "async-lru", specifier = ">=2.0.5" },
-    { name = "click", specifier = ">=8.3.0" },
-    { name = "colorama", specifier = ">=0.4.6" },
-    { name = "dataclass-click", specifier = ">=1.0.4" },
-    { name = "httpx", specifier = ">=0.28.1" },
-    { name = "httpx-retries", specifier = ">=0.4.6" },
-    { name = "inquirerpy", specifier = ">=0.3.4" },
-    { name = "m3u8", specifier = ">=6.0.0" },
-    { name = "mutagen", specifier = ">=1.47.0" },
-    { name = "pillow", specifier = ">=12.0.0" },
-    { name = "pywidevine", specifier = ">=1.8.0" },
-    { name = "structlog", specifier = ">=25.5.0" },
-    { name = "yt-dlp", specifier = ">=2025.10.22" },
+sdist = { url = "https://files.pythonhosted.org/packages/9e/0d/e151ef3c1c70e52c10052f9971c57ce6f2cfc5e910aa6a989ac03c726dcf/gamdl-3.6.tar.gz", hash = "sha256:7fa6d6a7d12ed1cc9cc2a910d0d62f797f2fa2ef5f789d7251f3b31549cdac8f", size = 79413, upload-time = "2026-05-20T21:01:22.117Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7f/f4/5ff15a635dc1723407f7e625476d4e924eddf8f33eb89a523b09723b5833/gamdl-3.6-py3-none-any.whl", hash = "sha256:b6e460ad5eadb785c40f248adf812c63f7a3ba513eb0f79ccc5f1fa666575c8e", size = 86373, upload-time = "2026-05-20T21:01:20.437Z" },
 ]
 
 [[package]]

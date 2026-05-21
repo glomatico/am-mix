@@ -77,7 +77,7 @@
     "api": {
       "title": "API",
       "wrapper": "Use Wrapper",
-      "wrapper_account_url": "Wrapper Account URL",
+      "wrapperBaseUrl": "Wrapper base URL",
       "cookies": "Cookies File Path",
       "language": "Language",
       "method": {
@@ -93,7 +93,6 @@
         "title": "Cover Format"
       },
       "coverSize": "Cover Size",
-      "wrapperM3u8Ip": "Wrapper M3U8 IP",
       "wvd": "WVD File Path",
       "syncedLyricsFormat": {
         "title": "Synced Lyrics Format"
@@ -123,10 +122,6 @@
       "output": "Output Directory",
       "temp": "Temp Directory",
       "nm3u8dlre": "N_m3u8DL-RE Path",
-      "mp4decrypt": "mp4decrypt Path",
-      "ffmpeg": "FFmpeg Path",
-      "mp4box": "MP4Box Path",
-      "wrapperDecryptIp": "Wrapper Decrypt IP",
       "downloadMode": {
         "title": "Download Mode",
         "ytdlp": "yt-dlp",
@@ -152,11 +147,6 @@
     },
     "musicVideoDownloader": {
       "title": "Music Video Downloader",
-      "musicVideoRemuxMode": {
-        "title": "Remux Mode",
-        "ffmpeg": "FFmpeg",
-        "mp4box": "MP4Box"
-      },
       "musicVideoRemuxFormat": {
         "title": "Remux Format",
         "mp4": "MP4",

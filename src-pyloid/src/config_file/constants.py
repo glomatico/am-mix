@@ -1,6 +1,6 @@
 import inspect
 
-from gamdl.api import AppleMusicApi
+from gamdl.api import AppleMusicApi, WrapperApi
 from gamdl.interface import (
     AppleMusicBaseInterface,
     AppleMusicSongInterface,
@@ -27,11 +27,11 @@ from gamdl.downloader import (
 from .types import ConfigOption, Config
 from .enums import ApiMethod
 
-api_create_sig = inspect.signature(AppleMusicApi.create)
-api_create_from_netscape_cookies_sig = inspect.signature(
+apple_music_api_create_sig = inspect.signature(AppleMusicApi.create)
+wrapper_api_create_sig = inspect.signature(WrapperApi.create)
+apple_music_api_create_from_netscape_cookies_sig = inspect.signature(
     AppleMusicApi.create_from_netscape_cookies
 )
-api_create_from_wrapper_sig = inspect.signature(AppleMusicApi.create_from_wrapper)
 
 base_interface_create_sig = inspect.signature(AppleMusicBaseInterface.create)
 song_interface_init_sig = inspect.signature(AppleMusicSongInterface.__init__)
@@ -59,15 +59,13 @@ DEFAULT_SETTINGS = Config(
     ),
     cookies=ConfigOption(
         data_type=str,
-        default_value=api_create_from_netscape_cookies_sig.parameters[
+        default_value=apple_music_api_create_from_netscape_cookies_sig.parameters[
             "cookies_path"
         ].default,
     ),
-    wrapper_account_url=ConfigOption(
+    wrapper_base_url=ConfigOption(
         data_type=str,
-        default_value=api_create_from_wrapper_sig.parameters[
-            "wrapper_account_url"
-        ].default,
+        default_value=wrapper_api_create_sig.parameters["base_url"].default,
     ),
     media_user_token=ConfigOption(
         data_type=str,
@@ -79,7 +77,7 @@ DEFAULT_SETTINGS = Config(
     ),
     language=ConfigOption(
         data_type=str,
-        default_value=api_create_sig.parameters["language"].default,
+        default_value=apple_music_api_create_sig.parameters["language"].default,
     ),
     cover_format=ConfigOption(
         data_type=CoverFormat,
@@ -88,10 +86,6 @@ DEFAULT_SETTINGS = Config(
     cover_size=ConfigOption(
         data_type=int,
         default_value=base_interface_create_sig.parameters["cover_size"].default,
-    ),
-    wrapper_m3u8_ip=ConfigOption(
-        data_type=str,
-        default_value=base_interface_create_sig.parameters["wrapper_m3u8_ip"].default,
     ),
     wvd=ConfigOption(
         data_type=str,
@@ -144,26 +138,6 @@ DEFAULT_SETTINGS = Config(
     nm3u8dlre=ConfigOption(
         data_type=str,
         default_value=base_downloader_init_sig.parameters["nm3u8dlre_path"].default,
-        nullable=True,
-    ),
-    mp4decrypt=ConfigOption(
-        data_type=str,
-        default_value=base_downloader_init_sig.parameters["mp4decrypt_path"].default,
-        nullable=True,
-    ),
-    ffmpeg=ConfigOption(
-        data_type=str,
-        default_value=base_downloader_init_sig.parameters["ffmpeg_path"].default,
-        nullable=True,
-    ),
-    mp4box=ConfigOption(
-        data_type=str,
-        default_value=base_downloader_init_sig.parameters["mp4box_path"].default,
-        nullable=True,
-    ),
-    wrapper_decrypt_ip=ConfigOption(
-        data_type=str,
-        default_value=base_downloader_init_sig.parameters["wrapper_decrypt_ip"].default,
         nullable=True,
     ),
     download_mode=ConfigOption(
@@ -249,11 +223,6 @@ DEFAULT_SETTINGS = Config(
     no_synced_lyrics=ConfigOption(
         data_type=bool,
         default_value=False,
-    ),
-    # Music Video Downloader options
-    music_video_remux_mode=ConfigOption(
-        data_type=RemuxMode,
-        default_value=music_video_downloader_init_sig.parameters["remux_mode"].default,
     ),
     music_video_remux_format=ConfigOption(
         data_type=RemuxFormatMusicVideo,
