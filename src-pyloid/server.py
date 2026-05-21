@@ -19,7 +19,7 @@ from gamdl.interface import (
     AppleMusicUploadedVideoInterface,
 )
 from pyloid.browser_window import BrowserWindow
-from pyloid.rpc import PyloidRPC
+from pyloid.rpc import PyloidRPC, RPCError
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QDesktopServices
 from src.config_file import ApiMethod, ConfigFile
@@ -50,6 +50,9 @@ class CustomRpc(PyloidRPC):
         self._functions["open_url"] = self.open_url
         self._functions["get_version"] = self.get_version
 
+    def _raise_rpc_error(self, e: Exception) -> None:
+        raise RPCError(message=str(e))
+
     def _bind_methods(
         self,
         cls: object,
@@ -67,14 +70,16 @@ class CustomRpc(PyloidRPC):
             if not callable(method):
                 continue
 
-            if inspect.iscoroutinefunction(method):
-                rpc_method = method
-            else:
+            async def rpc_method(*args, __method=method, **kwargs):
+                try:
+                    if inspect.iscoroutinefunction(__method):
+                        return await __method(*args, **kwargs)
+                    else:
+                        return await asyncio.to_thread(__method, *args, **kwargs)
+                except Exception as e:
+                    self._raise_rpc_error(e)
 
-                async def rpc_method(*args, __method=method, **kwargs):
-                    return await asyncio.to_thread(__method, *args, **kwargs)
-
-                rpc_method.__signature__ = inspect.signature(method)
+            rpc_method.__signature__ = inspect.signature(method)
 
             self._functions[f"{prefix}_{method_name}"] = rpc_method
 
@@ -82,29 +87,47 @@ class CustomRpc(PyloidRPC):
         self.config_file = ConfigFile()
 
         if self.config_file.parse_errors and not ignore_error:
-            raise Exception(list(self.config_file.parse_errors.values())[0])
+            # raise Exception(list(self.config_file.parse_errors.values())[0])
+            raise RPCError(
+                message=(
+                    "Failed to parse Config File:\n"
+                    + "\n".join(
+                        f"{file}: {error}"
+                        for file, error in self.config_file.parse_errors.items()
+                    )
+                )
+            )
 
         self._bind_methods(self.config_file, "config_file")
 
     async def initialize_apple_music_api(self) -> None:
         config = self.config_file.config
 
-        if config.api_method == ApiMethod.COOKIES:
-            self.apple_music_api = await AppleMusicApi.create_from_netscape_cookies(
-                cookies_path=config.cookies,
-                language=config.language,
-            )
-        elif config.api_method == ApiMethod.WRAPPER:
-            self.apple_music_api = await AppleMusicApi.create_from_wrapper(
-                wrapper_account_url=config.wrapper_base_url,
-                language=config.language,
-            )
-        else:
-            self.apple_music_api = await AppleMusicApi.create(
-                media_user_token=config.media_user_token,
-                language=config.language,
-                storefront=None,
-            )
+        try:
+            if config.api_method == ApiMethod.WRAPPER:
+                self.wrapper_api = await WrapperApi.create(
+                    base_url=config.wrapper_base_url,
+                )
+            else:
+                self.wrapper_api = None
+
+            if config.api_method == ApiMethod.COOKIES:
+                self.apple_music_api = await AppleMusicApi.create_from_netscape_cookies(
+                    cookies_path=config.cookies,
+                    language=config.language,
+                )
+            elif config.api_method == ApiMethod.WRAPPER:
+                self.apple_music_api = await AppleMusicApi.create_from_wrapper(
+                    wrapper_api=self.wrapper_api,
+                )
+            else:
+                self.apple_music_api = await AppleMusicApi.create(
+                    media_user_token=config.media_user_token,
+                    language=config.language,
+                    storefront=None,
+                )
+        except Exception as e:
+            self._raise_rpc_error(e)
 
         self._bind_methods(
             self.apple_music_api,
@@ -114,20 +137,16 @@ class CustomRpc(PyloidRPC):
     async def _initialize_apple_music_interface(self) -> None:
         config = self.config_file.config
 
-        if config.api_method == ApiMethod.WRAPPER:
-            wrapper_api = await WrapperApi.create(
-                base_url=config.wrapper_base_url,
+        try:
+            base = await AppleMusicBaseInterface.create(
+                self.apple_music_api,
+                cover_format=config.cover_format,
+                cover_size=config.cover_size,
+                wvd_path=config.wvd,
+                wrapper_api=self.wrapper_api,
             )
-        else:
-            wrapper_api = None
-
-        base = await AppleMusicBaseInterface.create(
-            self.apple_music_api,
-            cover_format=config.cover_format,
-            cover_size=config.cover_size,
-            wvd_path=config.wvd,
-            wrapper_api=wrapper_api,
-        )
+        except Exception as e:
+            self._raise_rpc_error(e)
 
         song = AppleMusicSongInterface(
             base,
