@@ -16,7 +16,7 @@ export const useSettings = () => {
     settingsResult.value.loadingState = LoadingState.LOADING;
 
     try {
-      await initializePyloid();
+      await initializePyloid(true);
       settingsResult.value.result = await getJsonConfig();
     } catch (error) {
       settingsResult.value.loadingState = LoadingState.ERROR;

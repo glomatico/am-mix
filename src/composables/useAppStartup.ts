@@ -1,4 +1,4 @@
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { LoadingState } from "./enums";
 import { useAppleMusicApi } from "./useAppleMusicApi";
 import { useConfigFile } from "./useConfigFile";
@@ -13,6 +13,8 @@ export const useAppStartup = () => {
   const configFileResult = createResultRef();
   const appleMusicApiResult = createResultRef();
   const downloadManagerResult = createResultRef();
+
+  const configFileExists = ref<boolean | null>(null);
 
   const isInitialized = computed(
     () =>
@@ -59,31 +61,28 @@ export const useAppStartup = () => {
     appleMusicApiResult.value.loadingState = LoadingState.SUCCESS;
   };
 
-  const initializeConfigFile = async (): Promise<Boolean> => {
+  const initializeConfigFile = async () => {
     configFileResult.value.loadingState = LoadingState.LOADING;
-
-    let result;
 
     try {
       await initializeConfigFilePyloid();
-      result = await exists();
+      configFileExists.value = await exists();
     } catch (error) {
       configFileResult.value.loadingState = LoadingState.ERROR;
       configFileResult.value.errorMessage =
         error instanceof Error ? error.message : String(error);
       console.error("Error loading config file:", error);
+      return;
     }
 
     configFileResult.value.loadingState = LoadingState.SUCCESS;
-
-    return result;
   };
 
   const initialize = async () => {
-    const result = await initializeConfigFile();
+    await initializeConfigFile();
     if (
       configFileResult.value.loadingState !== LoadingState.SUCCESS ||
-      !result
+      !configFileExists.value
     ) {
       return;
     }
@@ -100,6 +99,7 @@ export const useAppStartup = () => {
     configFileResult,
     appleMusicApiResult,
     downloadManagerResult,
+    configFileExists,
     isInitialized,
     hasError,
     initialize,

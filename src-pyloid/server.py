@@ -78,8 +78,11 @@ class CustomRpc(PyloidRPC):
 
             self._functions[f"{prefix}_{method_name}"] = rpc_method
 
-    async def initialize_config_file(self) -> None:
+    async def initialize_config_file(self, ignore_error: bool = False) -> None:
         self.config_file = ConfigFile()
+
+        if self.config_file.parse_errors and not ignore_error:
+            raise Exception(list(self.config_file.parse_errors.values())[0])
 
         self._bind_methods(self.config_file, "config_file")
 

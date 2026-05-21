@@ -12,6 +12,7 @@ const {
   configFileResult,
   appleMusicApiResult,
   downloadManagerResult,
+  configFileExists,
   isInitialized,
   hasError,
   initialize,
@@ -20,7 +21,11 @@ const {
 onMounted(async () => {
   await initialize();
 
-  if (appleMusicApiResult.value.loadingState === LoadingState.IDLE) {
+  console.log(
+    configFileResult.value
+  )
+
+  if (configFileExists.value === false) {
     router.push('/setup');
   }
 });
@@ -61,8 +66,7 @@ onMounted(async () => {
           </v-col>
 
           <v-col v-if="hasError" cols="12" align="center">
-            <v-btn to="/setup" variant="outlined" rounded
-              :disabled="configFileResult.loadingState !== LoadingState.SUCCESS">
+            <v-btn to="/setup" variant="outlined" rounded>
               {{ $t('startup.goToSetup') }}
             </v-btn>
           </v-col>

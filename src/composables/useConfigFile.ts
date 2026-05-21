@@ -1,8 +1,8 @@
 import { rpc } from "pyloid-js";
 
 export const useConfigFile = () => {
-  const initialize = async () => {
-    await rpc.call("initialize_config_file");
+  const initialize = async (ignoreError: boolean = false) => {
+    await rpc.call("initialize_config_file", { ignore_error: ignoreError });
   };
 
   const exists = async () => {

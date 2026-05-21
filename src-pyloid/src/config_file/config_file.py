@@ -10,6 +10,8 @@ from .constants import DEFAULT_SETTINGS
 
 class ConfigFile:
     def __init__(self):
+        self.parse_errors: dict[str, Exception] = {}
+
         self._initialize_path()
         self._initialize_config()
 
@@ -27,13 +29,18 @@ class ConfigFile:
         self.config = Config()
         for key, default_setting in DEFAULT_SETTINGS.__dict__.items():
             if key in self.json_config:
-                self.config.__dict__[key] = self._parse_config(
-                    key,
-                    default_setting.is_list,
-                    default_setting.nullable,
-                    default_setting.data_type,
-                    self.json_config[key],
-                )
+                try:
+                    self.config.__dict__[key] = self._parse_config(
+                        key,
+                        default_setting.is_list,
+                        default_setting.nullable,
+                        default_setting.data_type,
+                        self.json_config[key],
+                    )
+                except Exception as e:
+                    self.parse_errors[key] = e
+                    self.config.__dict__[key] = default_setting.default_value
+                    continue
             else:
                 self.config.__dict__[key] = default_setting.default_value
                 self.json_config[key] = self._serialize_config(
@@ -76,6 +83,8 @@ class ConfigFile:
                 self.config.__dict__[key],
                 config_option.is_list,
             )
+
+            self.parse_errors.pop(key, None)
 
         self.save()
 
