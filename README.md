@@ -31,28 +31,21 @@ Powered by [gamdl](https://github.com/glomatico/gamdl) on the backend and built 
     - **Firefox**: [Export Cookies](https://addons.mozilla.org/addon/export-cookies-txt)
     - **Chromium**: [Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)
   - **Media user token** - paste your token from the browser (advanced)
-  - **Wrapper** - use a [wrapper](https://github.com/WorldObservationLog/wrapper) server instead of cookies (required for some experimental song codecs; see [gamdl's wrapper docs](https://github.com/glomatico/gamdl#wrapper))
+  - **Wrapper** - use a [wrapper](https://github.com/WorldObservationLog/wrapper) server instead of cookies. This is useful for wrapper-based login and required for some experimental song codecs; see [gamdl's wrapper docs](https://github.com/glomatico/gamdl#wrapper).
 
 ### Dependencies
 
-Add these tools to your system **PATH**, or set their paths in [Settings](#settings) (`~/.am-mix/config.yml`). Which tools you need depends on which features you use:
+#### Wrapper
 
-| Use Case                      | Settings                                                                                                                                                          | Required Tools                                                        |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| **Songs (legacy codecs)**     | Song Codec Priority:<br>`aac-legacy` or `aac-he-legacy`                                                                                                           | None                                                                  |
-| **Songs (non-legacy codecs)** | Song Codec Priority:<br>`aac`, `aac-he`, `aac-binaural`, `aac-downmix`<br>`aac-he-binaural`, `aac-he-downmix`, `atmos`, `ac3`, or `alac`<br>API Method: `wrapper` | [Wrapper](https://github.com/WorldObservationLog/wrapper)             |
-| **Music videos**              | Music Video Remux Mode: `ffmpeg`<br>Music Video Remux Mode: `mp4box`                                                                                              | FFmpeg, mp4decrypt<br>MP4Box, mp4decrypt                              |
-| **Faster downloads**          | Download Mode: `nm3u8dlre`                                                                                                                                        | [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE/releases/latest) |
+Use the [wrapper](https://github.com/WorldObservationLog/wrapper) for wrapper authentication and non-web song codecs such as `aac`, `aac-he`, `atmos`, `ac3`, or `alac`.
 
-#### Tool reference
+Cookies are not required when using the wrapper API method.
 
-| Tool            | Download                                                                                                              | Purpose                                   |
-| --------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| **FFmpeg**      | [Windows](https://github.com/AnimMouse/ffmpeg-stable-autobuild/releases) · [Linux](https://johnvansickle.com/ffmpeg/) | Music video remuxing                      |
-| **MP4Box**      | [Download](https://gpac.io/downloads/gpac-nightly-builds/)                                                            | Music video remuxing                      |
-| **mp4decrypt**  | [Download](https://www.bento4.com/downloads/)                                                                         | Music video decryption                    |
-| **N_m3u8DL-RE** | [Download](https://github.com/nilaoda/N_m3u8DL-RE/releases/latest)                                                    | Optional faster HLS downloads             |
-| **Wrapper**     | [Download](https://github.com/WorldObservationLog/wrapper)                                                            | Non Legacy Song Codecs without API limits |
+#### N_m3u8DL-RE
+
+Use [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE/releases/latest) only if you set Download Mode to `nm3u8dlre` for faster downloads.
+
+Add it to your system **PATH** or set its path in [Settings](#settings) (`~/.am-mix/config.yml`).
 
 ## 📦 Installation
 
@@ -63,6 +56,52 @@ Add these tools to your system **PATH**, or set their paths in [Settings](#setti
 ## ⚙️ Settings
 
 Configure your settings in the Settings page or using the config file (`~/.am-mix/config.yml`).
+
+### Template Variables
+
+**Tags for templates and exclude-tags:**
+
+- `album`, `album_artist`, `album_id`
+- `artist`, `artist_id`
+- `composer`, `composer_id`
+- `date` (supports strftime format: `{date:%Y}`)
+- `disc`, `disc_total`
+- `media_type`
+- `playlist_artist`, `playlist_id`, `playlist_title`, `playlist_track`
+- `title`, `title_id`
+- `track`, `track_total`
+
+**Tags for exclude-tags only:**
+
+- `album_sort`, `artist_sort`, `composer_sort`, `title_sort`
+- `comment`, `compilation`, `copyright`, `cover`, `gapless`, `genre`, `genre_id`, `lyrics`, `rating`, `storefront`, `xid`
+- `all` (special: skip all tagging)
+
+### Song Codecs
+
+**Web:**
+
+- `aac-web` - AAC 256kbps 44.1kHz
+- `aac-he-web` - AAC-HE 64kbps 44.1kHz
+
+**Non-web** (wrapper recommended; may not work without wrapper due to API limitations):
+
+- `aac` - AAC 256kbps up to 48kHz
+- `aac-he` - AAC-HE 64kbps up to 48kHz
+- `aac-binaural` - AAC 256kbps binaural
+- `aac-downmix` - AAC 256kbps downmix
+- `aac-he-binaural` - AAC-HE 64kbps binaural
+- `aac-he-downmix` - AAC-HE 64kbps downmix
+- `atmos` - Dolby Atmos 768kbps
+- `ac3` - AC3 640kbps
+- `alac` - ALAC up to 24-bit/192kHz
+- `ask` - Interactive codec selection
+
+### Music Video Codecs
+
+- `h264`
+- `h265`
+- `ask` - Interactive codec selection
 
 ## 📄 License
 
