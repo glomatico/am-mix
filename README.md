@@ -26,32 +26,36 @@ Powered by [gamdl](https://github.com/glomatico/gamdl) on the backend and built 
 ### Required
 
 - **Active Apple Music subscription**
-- **Apple Music authentication** (configure one method in [Settings](#settings) on first launch):
+- **Apple Music authentication** (configure one method in [Settings](#settings-section) on first launch):
   - **Cookies** - export your browser cookies in Netscape format while logged in at [Apple Music](https://music.apple.com):
     - **Firefox**: [Export Cookies](https://addons.mozilla.org/addon/export-cookies-txt)
     - **Chromium**: [Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)
-  - **Media user token** - paste your token from the browser (advanced)
-  - **Wrapper** - use a [wrapper](https://github.com/WorldObservationLog/wrapper) server instead of cookies. This is useful for wrapper-based login and required for some experimental song codecs; see [gamdl's wrapper docs](https://github.com/glomatico/gamdl#wrapper).
+  - **Media user token** - paste your token from the browser (advanced).
+  - **Wrapper** - see [Wrapper](#wrapper-section) section below for more details.
 
 ### Dependencies
 
 #### Wrapper
 
-Use the [wrapper](https://github.com/WorldObservationLog/wrapper) for wrapper authentication and non-web song codecs such as `aac`, `aac-he`, `atmos`, `ac3`, or `alac`.
+<a id="wrapper-section"></a>
 
-Cookies are not required when using the wrapper API method.
+Use the [Wrapper v2](https://github.com/glomatico/wrapper-v2) for Wrapper authentication and non-web song codecs such as `aac`, `atmos`, or `alac`.
+
+Cookies are not required when using the Wrapper API method.
 
 #### N_m3u8DL-RE
 
 Use [N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE/releases/latest) only if you set Download Mode to `nm3u8dlre` for faster downloads.
 
-Add it to your system **PATH** or set its path in [Settings](#settings) (`~/.am-mix/config.yml`).
+Add it to your system **PATH** or set its path in [Settings](#settings-section).
 
 ## 📦 Installation
 
 1. Download the latest release from [GitHub](https://github.com/glomatico/am-mix/releases/latest).
 2. Extract the zip file.
 3. Run the `am-mix` executable.
+
+<a id="settings-section"></a>
 
 ## ⚙️ Settings
 
@@ -84,7 +88,7 @@ Configure your settings in the Settings page or using the config file (`~/.am-mi
 - `aac-web` - AAC 256kbps 44.1kHz
 - `aac-he-web` - AAC-HE 64kbps 44.1kHz
 
-**Non-web** (wrapper recommended; may not work without wrapper due to API limitations):
+**Non-web** (Wrapper recommended; may not work without Wrapper due to API limitations):
 
 - `aac` - AAC 256kbps up to 48kHz
 - `aac-he` - AAC-HE 64kbps up to 48kHz
