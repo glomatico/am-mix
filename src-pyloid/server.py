@@ -194,6 +194,7 @@ class CustomRpc(PyloidRPC):
             song,
             music_video,
             uploaded_video,
+            disallowed_media_types=["artist"],
         )
 
     async def initialize_apple_music_downloader(self) -> None:
