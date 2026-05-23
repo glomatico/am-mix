@@ -1,9 +1,11 @@
 import asyncio
 import inspect
+import threading
 from pathlib import Path
 from typing import Any
 
 from gamdl.api import AppleMusicApi, WrapperApi
+from gamdl.api.exceptions import GamdlApiResponseError
 from gamdl.downloader import (
     AppleMusicBaseDownloader,
     AppleMusicDownloader,
@@ -20,8 +22,9 @@ from gamdl.interface import (
 )
 from pyloid.browser_window import BrowserWindow
 from pyloid.rpc import PyloidRPC, RPCError
-from PySide6.QtCore import QUrl
+from PySide6.QtCore import QTimer, QUrl
 from PySide6.QtGui import QDesktopServices
+from PySide6.QtWidgets import QApplication, QInputDialog, QLineEdit, QWidget
 from src.config_file import ApiMethod, ConfigFile
 from src.download_manager.manager import DownloadManager
 
@@ -107,6 +110,8 @@ class CustomRpc(PyloidRPC):
             if config.api_method == ApiMethod.WRAPPER:
                 self.wrapper_api = await WrapperApi.create(
                     base_url=config.wrapper_base_url,
+                    get_credentials_func=self.wrapper_credentials_handler,
+                    get_2fa_code=self.wrapper_2fa_handler,
                 )
             else:
                 self.wrapper_api = None
@@ -253,3 +258,77 @@ class CustomRpc(PyloidRPC):
 
     async def get_version(self) -> str:
         return __version__
+
+    def _dialog_parent(self) -> QWidget | None:
+        if self.window is None:
+            return None
+
+        return self.window._window._window
+
+    def _qt_input_text(
+        self,
+        title: str,
+        label: str,
+        *,
+        password: bool = False,
+    ) -> str | None:
+        result: list[str | None] = [None]
+
+        def show_dialog() -> None:
+            echo = (
+                QLineEdit.EchoMode.Password if password else QLineEdit.EchoMode.Normal
+            )
+            text, ok = QInputDialog.getText(
+                self._dialog_parent(),
+                title,
+                label,
+                echo=echo,
+            )
+            result[0] = text.strip() if ok and text.strip() else None
+
+        if threading.current_thread() is threading.main_thread():
+            show_dialog()
+        else:
+            finished = threading.Event()
+
+            def show_dialog_and_finish() -> None:
+                try:
+                    show_dialog()
+                finally:
+                    finished.set()
+
+            parent = self._dialog_parent()
+            QTimer.singleShot(
+                0,
+                parent or QApplication.instance(),
+                show_dialog_and_finish,
+            )
+            finished.wait()
+        return result[0]
+
+    def wrapper_credentials_handler(self) -> tuple[str, str]:
+        username = self._qt_input_text(
+            "Apple Music Login",
+            "Apple ID:",
+        )
+        if username is None:
+            raise GamdlApiResponseError("Wrapper login cancelled")
+
+        password = self._qt_input_text(
+            "Apple Music Login",
+            "Password:",
+            password=True,
+        )
+        if password is None:
+            raise GamdlApiResponseError("Wrapper login cancelled")
+
+        return username, password
+
+    def wrapper_2fa_handler(self) -> str:
+        code = self._qt_input_text(
+            "Two-Factor Authentication",
+            "Verification code:",
+        )
+        if code is None:
+            raise GamdlApiResponseError("Wrapper 2FA cancelled")
+        return code
