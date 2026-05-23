@@ -48,6 +48,9 @@ class CustomRpc(PyloidRPC):
         self._functions["initialize_download_manager"] = (
             self.initialize_download_manager
         )
+        self._functions["apple_music_api_account_info"] = (
+            self.apple_music_api_account_info
+        )
         self._functions["open_file_dialog"] = self.open_file_dialog
         self._functions["select_directory_dialog"] = self.select_directory_dialog
         self._functions["open_url"] = self.open_url
@@ -216,6 +219,12 @@ class CustomRpc(PyloidRPC):
             no_synced_lyrics=config.no_synced_lyrics,
             synced_lyrics_only=config.synced_lyrics_only,
         )
+
+    async def apple_music_api_account_info(self) -> dict[str, Any]:
+        if self.apple_music_api is None or not self.apple_music_api.account_info:
+            raise RPCError(message="Apple Music API not initialized")
+
+        return self.apple_music_api.account_info
 
     async def queue_callback(self, payload: dict[str, Any]) -> None:
         """Payload shape: ``{"delete": bool, "item": dict}`` (see DownloadManager._notify_queue_change)."""

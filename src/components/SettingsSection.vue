@@ -6,9 +6,9 @@ defineProps<{
 
 <template>
   <v-col cols="12">
-    <p class="font-weight-bold text-headline-small ma-0 mb-2">
+    <h2 class="font-weight-bold ma-0 mb-2">
       {{ $t(titleKey) }}
-    </p>
+    </h2>
     <v-divider />
   </v-col>
 </template>

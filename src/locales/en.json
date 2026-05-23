@@ -37,6 +37,16 @@
   "collectionCard": {
     "trackCount": "{count} track(s)"
   },
+  "accountInfo": {
+    "title": "Account Info",
+    "active": "Active",
+    "inactive": "Inactive",
+    "storefront": "Storefront: {storefront}",
+    "restrictions": "Restrictions: {restrictions}",
+    "restricted": "Restricted",
+    "unrestricted": "Unrestricted",
+    "error": "Failed to fetch account info."
+  },
   "collectionBanner": {
     "showDescription": "Show description",
     "description": "Description",

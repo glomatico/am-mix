@@ -37,6 +37,10 @@ export const useAppleMusicApi = () => {
     });
   };
 
+  const accountInfo = async () => {
+    return await rpc.call("apple_music_api_account_info");
+  };
+
   return {
     initialize,
     getSearchResults,
@@ -44,5 +48,6 @@ export const useAppleMusicApi = () => {
     getAlbum,
     getPlaylist,
     getArtist,
+    accountInfo,
   };
 };
