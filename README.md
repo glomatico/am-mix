@@ -33,7 +33,7 @@ Powered by [gamdl](https://github.com/glomatico/gamdl) on the backend and built 
   - **Media user token** - paste your token from the browser (advanced).
   - **Wrapper** - see [Wrapper](#wrapper-section) section below for more details.
 
-### Dependencies
+### Optional Dependencies
 
 #### Wrapper
 
