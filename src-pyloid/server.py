@@ -1,8 +1,9 @@
 import asyncio
 import inspect
 import threading
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeVar
 
 from gamdl.api import AppleMusicApi, WrapperApi
 from gamdl.api.exceptions import GamdlApiResponseError
@@ -24,11 +25,23 @@ from pyloid.browser_window import BrowserWindow
 from pyloid.rpc import PyloidRPC, RPCError
 from PySide6.QtCore import QTimer, QUrl
 from PySide6.QtGui import QDesktopServices
-from PySide6.QtWidgets import QApplication, QInputDialog, QLineEdit, QWidget
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QDialogButtonBox,
+    QInputDialog,
+    QLabel,
+    QLineEdit,
+    QListWidget,
+    QVBoxLayout,
+    QWidget,
+)
 from src.config_file import ApiMethod, ConfigFile
 from src.download_manager.manager import DownloadManager
 
 from src import __version__
+
+T = TypeVar("T")
 
 
 class CustomRpc(PyloidRPC):
@@ -162,15 +175,19 @@ class CustomRpc(PyloidRPC):
             codec_priority=config.song_codec,
             use_album_date=config.use_album_date,
             skip_stream_info=config.synced_lyrics_only,
+            ask_codec_function=self.ask_song_codec,
         )
         music_video = AppleMusicMusicVideoInterface(
             base,
             resolution=config.music_video_resolution,
             codec_priority=config.music_video_codec,
+            ask_video_codec_function=self.ask_music_video_video_codec,
+            ask_audio_codec_function=self.ask_music_video_audio_codec,
         )
         uploaded_video = AppleMusicUploadedVideoInterface(
             base,
             quality=config.uploaded_video_quality,
+            ask_quality_function=self.ask_uploaded_video_quality,
         )
 
         self.apple_music_interface = AppleMusicInterface(
@@ -274,6 +291,30 @@ class CustomRpc(PyloidRPC):
 
         return self.window._window._window
 
+    def _run_on_qt_main(self, fn: Callable[[], T]) -> T:
+        if threading.current_thread() is threading.main_thread():
+            return fn()
+
+        result: list[T | None] = [None]
+        error: list[BaseException | None] = [None]
+        finished = threading.Event()
+
+        def run_and_finish() -> None:
+            try:
+                result[0] = fn()
+            except BaseException as e:
+                error[0] = e
+            finally:
+                finished.set()
+
+        parent = self._dialog_parent()
+        QTimer.singleShot(0, parent or QApplication.instance(), run_and_finish)
+        finished.wait()
+
+        if error[0] is not None:
+            raise error[0]
+        return result[0]
+
     def _qt_input_text(
         self,
         title: str,
@@ -281,9 +322,7 @@ class CustomRpc(PyloidRPC):
         *,
         password: bool = False,
     ) -> str | None:
-        result: list[str | None] = [None]
-
-        def show_dialog() -> None:
+        def show_dialog() -> str | None:
             echo = (
                 QLineEdit.EchoMode.Password if password else QLineEdit.EchoMode.Normal
             )
@@ -293,27 +332,99 @@ class CustomRpc(PyloidRPC):
                 label,
                 echo=echo,
             )
-            result[0] = text.strip() if ok and text.strip() else None
+            return text.strip() if ok and text.strip() else None
 
-        if threading.current_thread() is threading.main_thread():
-            show_dialog()
-        else:
-            finished = threading.Event()
+        return self._run_on_qt_main(show_dialog)
 
-            def show_dialog_and_finish() -> None:
-                try:
-                    show_dialog()
-                finally:
-                    finished.set()
+    def _qt_select_item(
+        self,
+        title: str,
+        label: str,
+        choices: list[tuple[str, T]],
+    ) -> T | None:
+        if not choices:
+            return None
 
-            parent = self._dialog_parent()
-            QTimer.singleShot(
-                0,
-                parent or QApplication.instance(),
-                show_dialog_and_finish,
+        def show_dialog() -> T | None:
+            dialog = QDialog(self._dialog_parent())
+            dialog.setWindowTitle(title)
+
+            layout = QVBoxLayout(dialog)
+            layout.addWidget(QLabel(label))
+
+            list_widget = QListWidget(dialog)
+            for choice_label, _ in choices:
+                list_widget.addItem(choice_label)
+            list_widget.setCurrentRow(0)
+            list_widget.itemDoubleClicked.connect(dialog.accept)
+            layout.addWidget(list_widget)
+
+            buttons = QDialogButtonBox(
+                QDialogButtonBox.StandardButton.Ok
+                | QDialogButtonBox.StandardButton.Cancel,
+                dialog,
             )
-            finished.wait()
-        return result[0]
+            buttons.accepted.connect(dialog.accept)
+            buttons.rejected.connect(dialog.reject)
+            layout.addWidget(buttons)
+
+            if dialog.exec() != QDialog.DialogCode.Accepted:
+                return None
+
+            selected_index = list_widget.currentRow()
+            if selected_index < 0:
+                return None
+            return choices[selected_index][1]
+
+        return self._run_on_qt_main(show_dialog)
+
+    def ask_song_codec(self, playlists: list[dict]) -> dict | None:
+        return self._qt_select_item(
+            "Song Codec",
+            "Select which codec to download:",
+            [(playlist["stream_info"]["audio"], playlist) for playlist in playlists],
+        )
+
+    def ask_music_video_video_codec(self, playlists: list[Any]) -> Any | None:
+        return self._qt_select_item(
+            "Music Video Codec",
+            "Select which video codec to download: (Codec | Resolution | Bitrate)",
+            [
+                (
+                    " | ".join(
+                        [
+                            playlist.stream_info.codecs[:4],
+                            "x".join(
+                                str(value) for value in playlist.stream_info.resolution
+                            ),
+                            str(playlist.stream_info.bandwidth),
+                        ]
+                    ),
+                    playlist,
+                )
+                for playlist in playlists
+            ],
+        )
+
+    def ask_music_video_audio_codec(self, playlists: list[dict]) -> dict | None:
+        return self._qt_select_item(
+            "Music Video Audio",
+            "Select which audio codec to download:",
+            [(playlist["group_id"], playlist) for playlist in playlists],
+        )
+
+    def ask_uploaded_video_quality(
+        self,
+        available_qualities: dict[str, str],
+    ) -> str | None:
+        selected_quality = self._qt_select_item(
+            "Uploaded Video Quality",
+            "Select which quality to download:",
+            [(quality, quality) for quality in available_qualities],
+        )
+        if selected_quality is None:
+            return None
+        return available_qualities[selected_quality]
 
     def wrapper_credentials_handler(self) -> tuple[str, str]:
         username = self._qt_input_text(
