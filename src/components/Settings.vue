@@ -99,21 +99,6 @@ onMounted(async () => {
       </v-col>
 
       <v-col cols="12" md="6">
-        <FileDialogField v-model:file-path="newJsonConfig.mp4decrypt" :label="$t('settings.baseDownloader.mp4decrypt')"
-          filter="*" />
-      </v-col>
-
-      <v-col cols="12" md="6">
-        <FileDialogField v-model:file-path="newJsonConfig.ffmpeg" :label="$t('settings.baseDownloader.ffmpeg')"
-          filter="*" />
-      </v-col>
-
-      <v-col cols="12" md="6">
-        <FileDialogField v-model:file-path="newJsonConfig.mp4box" :label="$t('settings.baseDownloader.mp4box')"
-          filter="*" />
-      </v-col>
-
-      <v-col cols="12" md="6">
         <v-text-field variant="outlined" rounded v-model="newJsonConfig.wrapper_decrypt_ip" clearable hide-details
           :label="$t('settings.baseDownloader.wrapperDecryptIp')" />
       </v-col>
