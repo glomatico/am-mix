@@ -3,7 +3,6 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import AppBar from '../components/AppBar.vue';
 import AppStatusContainer from '../components/AppStatusContainer.vue';
-import { LoadingState } from '../composables/enums';
 import { useAppStartup } from '../composables/useAppStartup';
 
 const router = useRouter();
